@@ -13,11 +13,15 @@ const HistoryView = ({ token, setView }) => {
                 const res = await fetch(`${API_BASE_URL}/api/user/history`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Failed to fetch history');
+                if (!res.ok) {
+                    throw new Error(data.error || data.message || "Something went wrong");
+                }
                 setHistory(data);
             } catch (err) {
-                setError(err.message);
+                console.error("ERROR:", err);
+                setError(err.message || JSON.stringify(err));
             } finally {
                 setLoading(false);
             }

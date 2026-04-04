@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AILoading from './AILoading';
 import API_BASE_URL from '../config';
+import StudyResources from './StudyResources';
 
 const CareerPlanView = ({ token, setView }) => {
     const [profile, setProfile] = useState(null);
@@ -17,13 +18,14 @@ const CareerPlanView = ({ token, setView }) => {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
-                if (!response.ok) throw new Error('Failed to fetch Career Profile');
                 const data = await response.json();
-                
-                // If data is null (never set up)
+                if (!response.ok) {
+                    throw new Error(data.error || data.message || "Something went wrong");
+                }
                 setProfile(data);
             } catch (err) {
-                setError(err.message);
+                console.error("ERROR:", err);
+                setError(err.message || JSON.stringify(err));
             } finally {
                 setLoading(false);
             }
@@ -124,12 +126,16 @@ const CareerPlanView = ({ token, setView }) => {
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(payload)
             });
-            if (res.ok) {
-                const data = await res.json();
-                setProfile(data.data);
-                if (typeof skillToInject !== 'string') setNewSkill('');
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || data.message || "Something went wrong");
             }
-        } catch (err) { } finally { setIsUpdating(false); }
+            setProfile(data.data);
+            if (typeof skillToInject !== 'string') setNewSkill('');
+        } catch (err) { 
+            console.error("ERROR:", err);
+            setError(err.message || JSON.stringify(err));
+        } finally { setIsUpdating(false); }
     };
 
     return (
@@ -215,6 +221,8 @@ const CareerPlanView = ({ token, setView }) => {
                     </div>
                 ))}
             </div>
+
+            <StudyResources skills={profile.targetSkills} />
 
             {profile.recommendedProjects && profile.recommendedProjects.length > 0 && (
                 <div style={{ marginTop: '50px' }}>

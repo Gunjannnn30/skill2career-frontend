@@ -18,15 +18,19 @@ const Login = ({ setToken, setView }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
+
             const data = await res.json();
             
-            if (!res.ok) throw new Error(data.error || 'Login failed');
+            if (!res.ok) {
+                throw new Error(data.error || data.message || "Something went wrong");
+            }
             
             localStorage.setItem("token", data.token);
             setToken(data.token);
             setView('main');
         } catch (err) {
-            setError(err.message);
+            console.error("ERROR:", err);
+            setError(err.message || JSON.stringify(err));
         } finally {
             setLoading(false);
         }
