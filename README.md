@@ -5,7 +5,8 @@ A modern, production-ready SaaS frontend built with React that maps users' curre
 ## Features
 
 - **Guest Mode**: Try out the core AI skill analysis without logging in.
-- **SaaS Interface**: Clean, white-themed responsive layout with a collapsible sidebar and premium iconography.
+- **SaaS Interface**: Clean, white-themed responsive layout with a collapsible sidebar and premium iconography. Adjusted visual spacing for optimized viewing experience on landing pages.
+- **Secure Authentication**: Robust local email formatting and password strength validations implemented for seamless onboarding.
 - **Career Roadmap**: Generates structured, time-based implementation roadmaps.
 - **Skill Injection**: Actively track and mathematically recalculate your readiness score as you learn new skills.
 - **Study Resources**: Actionable, curated study resources integrated directly into the roadmap.
